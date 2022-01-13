@@ -78,7 +78,8 @@ namespace MyApp // Note: actual namespace depends on the project name.
                 _ => exception.ToString()
             };
 
-            Console.WriteLine(ErrorMessage);
+            //Console.WriteLine(ErrorMessage);
+            ErrorLog(ErrorMessage);
             return Task.CompletedTask;
         }
 
@@ -102,5 +103,13 @@ namespace MyApp // Note: actual namespace depends on the project name.
             }
         } // end of guidChacker
 
+        /// <summary>
+        /// log all error into a file.
+        /// </summary>
+        /// <param name="str">error string</param>
+        static void ErrorLog(string str)
+        {
+            System.IO.File.AppendAllText("log.txt", str);
+        }
     }
 }

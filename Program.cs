@@ -23,6 +23,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
         static void Main(string[] args)
         {
+            // check for guid(token) exist in file or not.
             guidChecker();
 
             botClient = new TelegramBotClient(BotGuid);
@@ -35,23 +36,16 @@ namespace MyApp // Note: actual namespace depends on the project name.
                 AllowedUpdates = { } // receive all update types
             };
 
+            // start bot 
             botClient.StartReceiving(
                 HandleUpdateAsync,
                 HandleErrorAsync,
                 receiverOptions,
                 cancellationToken: cts.Token);
 
-            //BotStarter();
+            
             Console.WriteLine("Running ...");
             Console.ReadKey();
-        }
-
-        static async void BotStarter()
-        {
-            // me is bot that connect to bot client.
-            User me = await botClient.GetMeAsync();
-
-            Console.WriteLine($"Hello, World! I am user {me.Id} and my name is {me.FirstName}.");
         }
 
         static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -87,7 +81,6 @@ namespace MyApp // Note: actual namespace depends on the project name.
             Console.WriteLine(ErrorMessage);
             return Task.CompletedTask;
         }
-
 
         /// <summary>
         /// chack if guid file exit or not. if not exist make one and get guid from user.

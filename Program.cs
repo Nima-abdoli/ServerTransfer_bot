@@ -20,7 +20,6 @@ namespace MyApp // Note: actual namespace depends on the project name.
         // bot client that connect to telegram server.
         static TelegramBotClient? botClient;
 
-
         static void Main(string[] args)
         {
             // check for guid(token) exist in file or not.

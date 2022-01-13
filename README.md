@@ -1,2 +1,6 @@
-# ServerTransfer_bot
- 
+# Server Transfer bot
+
+### simple file transfer between server and local computer.
+
+
+

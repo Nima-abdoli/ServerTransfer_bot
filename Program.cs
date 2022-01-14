@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -7,7 +8,7 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types.Enums;
-using System.Text;
+using Telegram.Bot.Types.InputFiles;
 
 namespace MyApp // Note: actual namespace depends on the project name.
 {
@@ -49,24 +50,69 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
         static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
+
             // Only process Message updates: https://core.telegram.org/bots/api#message
             if (update.Type != UpdateType.Message)
                 return;
+
             // Only process text messages
-            if (update.Message!.Type != MessageType.Text)
-                return;
+            if (update.Message!.Type == MessageType.Text)
+            {
+                var chatId = update.Message.Chat.Id;
+                var messageText = update.Message.Text;
 
-            var chatId = update.Message.Chat.Id;
-            var messageText = update.Message.Text;
+                Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
 
-            Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
+                // Echo received message text
+                Message sentMessage = await botClient.SendTextMessageAsync(
+                    chatId: chatId,
+                    text: "You said:\n" + messageText,
+                    cancellationToken: cancellationToken);
+            }
 
-            // Echo received message text
-            Message sentMessage = await botClient.SendTextMessageAsync(
-                chatId: chatId,
-                text: "You said:\n" + messageText,
+            if (update.Message!.Type == MessageType.Document)
+            {
+                var chatIdf = update.Message.Chat.Id;
+                
+                Message sentMessagef = await botClient.SendTextMessageAsync(
+                chatId: chatIdf,
+                text: "You send:\n" + update.Message.Document.FileName + " - " +
+                    update.Message.Document.MimeType + " - " + "File",
                 cancellationToken: cancellationToken);
+
+                FileDownloader(update.Message.Document.FileName,update.Message.Document.FileId);
+            }
+
         }
+
+        /// <summary>
+        /// download file that user send to bot in server side
+        /// </summary>
+        /// <param name="FileName">name of file that user send</param>
+        /// <param name="FileId">a string that telegram give to each file uploaded to telegram server</param>
+        static async void FileDownloader(string FileName,string FileId)
+        {
+            try
+            {
+                //Get file info from telegram server
+                Telegram.Bot.Types.File file = await botClient.GetFileAsync(FileId);
+
+                // downloaded file from telegram server and stream(save) it to file
+                FileStream fs = new FileStream(FileName, FileMode.Create);
+
+                // downloading file
+                await botClient.DownloadFileAsync(file.FilePath, fs);
+
+                //flush filestream process.
+                fs.Close();
+                fs.Dispose();
+            }
+            catch (Exception e)
+            {
+                ErrorLog(e.Message);
+            }
+            
+        }// end of FileDownloader.
 
         static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
@@ -108,7 +154,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
         /// <param name="str">error string</param>
         static void ErrorLog(string str)
         {
-            System.IO.File.AppendAllText("log.txt", str);
+            System.IO.File.AppendAllText("log.txt", str + DateTime.Now);
         }
     }
 }

@@ -69,21 +69,24 @@ namespace MyApp // Note: actual namespace depends on the project name.
                     text: "You said:\n" + messageText,
                     cancellationToken: cancellationToken);
             }
-
-            if (update.Message!.Type == MessageType.Document)
+            //Only process documents(mostly all kind of file pdf,exe,txt,zip and ...)
+            else if (update.Message!.Type == MessageType.Document)
             {
                 var chatIdf = update.Message.Chat.Id;
-                
+
                 Message sentMessagef = await botClient.SendTextMessageAsync(
                 chatId: chatIdf,
                 text: "You send:\n" + update.Message.Document.FileName + " - " +
                     update.Message.Document.MimeType + " - " + "File",
                 cancellationToken: cancellationToken);
 
-                FileDownloader(update.Message.Document.FileName,update.Message.Document.FileId);
+                FileDownloader(update.Message.Document.FileName, update.Message.Document.FileId);
             }
 
         }
+
+
+        #region File Downloader
 
         /// <summary>
         /// download file that user send to bot in server side
@@ -113,6 +116,10 @@ namespace MyApp // Note: actual namespace depends on the project name.
             }
             
         }// end of FileDownloader.
+
+        #endregion
+
+        #region ErrorHandling and ckeck
 
         static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
@@ -156,5 +163,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
         {
             System.IO.File.AppendAllText("log.txt", str + DateTime.Now);
         }
+
+        #endregion
     }
 }

@@ -116,6 +116,10 @@ namespace MyApp // Note: actual namespace depends on the project name.
             {
                 SendMessage("File Exploration is Under Maintenance ...");
             }
+            else
+            {
+                SendMessage("Use Proper Command");
+            }
         }// end of CommandHandling
 
         /// <summary>

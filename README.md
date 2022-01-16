@@ -14,7 +14,7 @@ I plan to add file exploring, zip/unzip files and i don't know it's possible or 
 - [ ] zip file in server side then send it.
 - [ ] run applications in server
 - [ ] make uploaded app start in boot
-- [ ] change file of uploaded project(app) with new version
+- [ ] Replace file of uploaded project(app) with new version
 
 
 

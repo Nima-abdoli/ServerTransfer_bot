@@ -20,6 +20,10 @@ namespace MyApp // Note: actual namespace depends on the project name.
         static private string? BotGuid;
         // bot client that connect to telegram server.
         static TelegramBotClient? botClient;
+        // every update from user intrate
+        static Update mUpdate;
+        static CancellationTokenSource Cts = new CancellationTokenSource();
+        static CancellationToken canceltoken;
 
         static void Main(string[] args)
         {
@@ -28,7 +32,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
             botClient = new TelegramBotClient(BotGuid);
 
-            using CancellationTokenSource cts = new CancellationTokenSource();
+             
 
             // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
             var receiverOptions = new ReceiverOptions
@@ -41,7 +45,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
                 HandleUpdateAsync,
                 HandleErrorAsync,
                 receiverOptions,
-                cancellationToken: cts.Token);
+                cancellationToken: Cts.Token);
 
             
             Console.WriteLine("Running ...");
@@ -50,41 +54,77 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
         static async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
+            mUpdate = update;
+            canceltoken = cancellationToken;
 
             // Only process Message updates: https://core.telegram.org/bots/api#message
             if (update.Type != UpdateType.Message)
                 return;
-
-            // Only process text messages
-            if (update.Message!.Type == MessageType.Text)
+            else
             {
-                var chatId = update.Message.Chat.Id;
-                var messageText = update.Message.Text;
+                // Only process text messages
+                if (update.Message!.Type == MessageType.Text)
+                {
+                    var chatId = update.Message.Chat.Id;
+                    var messageText = update.Message.Text;
 
-                Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
+                    Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
 
-                // Echo received message text
-                Message sentMessage = await botClient.SendTextMessageAsync(
-                    chatId: chatId,
-                    text: "You said:\n" + messageText,
+                    CommandHandler(messageText);
+                }
+                //Only process documents(mostly all kind of file pdf,exe,txt,zip and ...)
+                else if (update.Message!.Type == MessageType.Document)
+                {
+                    var chatIdf = update.Message.Chat.Id;
+
+                    Message sentMessagef = await botClient.SendTextMessageAsync(
+                    chatId: chatIdf,
+                    text: "You send:\n" + update.Message.Document.FileName + " - " +
+                        update.Message.Document.MimeType + " - " + "File",
                     cancellationToken: cancellationToken);
+
+                    FileDownloader(update.Message.Document.FileName, update.Message.Document.FileId);
+                }
             }
-            //Only process documents(mostly all kind of file pdf,exe,txt,zip and ...)
-            else if (update.Message!.Type == MessageType.Document)
-            {
-                var chatIdf = update.Message.Chat.Id;
-
-                Message sentMessagef = await botClient.SendTextMessageAsync(
-                chatId: chatIdf,
-                text: "You send:\n" + update.Message.Document.FileName + " - " +
-                    update.Message.Document.MimeType + " - " + "File",
-                cancellationToken: cancellationToken);
-
-                FileDownloader(update.Message.Document.FileName, update.Message.Document.FileId);
-            }
-
         }
 
+        #region CommandHandling
+
+        static void CommandHandler(string command)
+        {
+            if (command == "/start")
+            {
+                SendMessage("Wellcome to File Transfer Robot");
+            }
+            else if (command == "/getfile")
+            {
+                SendMessage("Getting File is Under Maintenance ...");
+            }
+            else if (command == "/sendfile")
+            {
+                SendMessage("Sending File is Under Maintenance ...");
+            }
+            else if (command == "/explore")
+            {
+                SendMessage("File Exploration is Under Maintenance ...");
+            }
+        }// end of CommandHandling
+
+        /// <summary>
+        /// send message to user
+        /// </summary>
+        /// <param name="message">text of message</param>
+        static async void SendMessage(string message)
+        {
+            Int64 ChatId = mUpdate.Message.Chat.Id;
+
+            Message SentMessage = await botClient.SendTextMessageAsync(
+                chatId : ChatId,
+                text : message,
+                cancellationToken: canceltoken);
+        }
+
+        #endregion
 
         #region File Downloader
 

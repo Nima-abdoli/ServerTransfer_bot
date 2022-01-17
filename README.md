@@ -56,3 +56,5 @@ I plan to add file exploring, zip/unzip files and i don't know it's possible or 
    ```
 
     
+
+   > Make Sure to do all of this in your Intended directory

@@ -12,8 +12,8 @@ I plan to add file exploring, zip/unzip files and i don't know it's possible or 
 - [x] Downloading File
 - [ ] File Exploring
 - [ ] zip file in server side then send it.
-- [ ] run applications in server
-- [ ] make uploaded app start in boot
+- [ ] Run applications in server
+- [ ] Make uploaded app start in boot
 - [ ] Replace file of uploaded project(app) with new version
 
 
@@ -22,10 +22,37 @@ I plan to add file exploring, zip/unzip files and i don't know it's possible or 
 
 ### How to use it : 
 
-1. make your bot with bot father bot in telegram 
-2. get token from bot father
-3. upload ServerTransfer_Bot program in your server
-4. run it.
-5. give token to program.
-6. start use bot from telegram client.
+1. Create your bot with 'bot father' bot in telegram 
+2. Get token from bot father
+3. Download ServerTransfer_bot program in your server
+4. Run it.
+5. Give token to program.
+6. Start use bot from telegram client.
 
+------
+
+### How To Download in Server :
+
+1. Download Release file with wget :
+
+   ```bash
+   sudo wget https://github.com/Nima-abdoli/ServerTransfer_bot/releases/download/v0.1.5/ServerTransfer_bot.v0.1.5.zip
+   ```
+
+   
+
+2. Unzip the downloaded file 
+
+   ```bash
+   sudo unzip ServerTransfer_bot.v0.1.5.zip
+   ```
+
+   
+
+3. Make "ServerTransfer_bot" file executable(forgot to do it before release it.)
+
+   ```bash
+   sudo chmod +x ServerTransfer_bot
+   ```
+
+    

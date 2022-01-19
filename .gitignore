@@ -333,3 +333,5 @@ ASALocalRun/
 # Local History for Visual Studio
 .localhistory/
 guid.txt
+.vscode/launch.json
+.vscode/tasks.json

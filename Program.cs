@@ -31,23 +31,25 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
         static void Main(string[] args)
         {
-            // check for guid(token) exist in file or not.
-            guidChecker();
+            FileLookup();
 
-            botClient = new TelegramBotClient(BotGuid);
+            //// check for guid(token) exist in file or not.
+            //guidChecker();
 
-            // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
-            var receiverOptions = new ReceiverOptions
-            {
-                AllowedUpdates = { } // receive all update types
-            };
+            //botClient = new TelegramBotClient(BotGuid);
 
-            // start bot 
-            botClient.StartReceiving(
-                HandleUpdateAsync,
-                HandleErrorAsync,
-                receiverOptions,
-                cancellationToken: Cts.Token);
+            //// StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
+            //var receiverOptions = new ReceiverOptions
+            //{
+            //    AllowedUpdates = { } // receive all update types
+            //};
+
+            //// start bot 
+            //botClient.StartReceiving(
+            //    HandleUpdateAsync,
+            //    HandleErrorAsync,
+            //    receiverOptions,
+            //    cancellationToken: Cts.Token);
 
             Console.WriteLine("Running ...");
             Console.ReadKey();
@@ -214,6 +216,34 @@ namespace MyApp // Note: actual namespace depends on the project name.
         static void ErrorLog(string str)
         {
             System.IO.File.AppendAllText("log.txt", str + DateTime.Now);
+        }
+
+        #endregion
+
+        #region File List
+
+        static void FileLookup()
+        {
+            if (Directory.Exists(@"D:\Developing\C#\Under Developing\ServerTransfer_bot"))
+            {
+
+                string[] subdir = Directory.GetDirectories("/mnt/d/Developing/C#/Under Developing/ServerTransfer_bot");
+                foreach (var item in subdir)
+                {
+                    Console.WriteLine(item);
+                }
+
+                string[] files = Directory.GetFiles("/mnt/d/Developing/C#/Under Developing/ServerTransfer_bot");
+
+                foreach (var item in files)
+                {
+                    Console.WriteLine(item);
+                }
+
+                
+            }
+
+
         }
 
         #endregion

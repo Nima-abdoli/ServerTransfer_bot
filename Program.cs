@@ -227,17 +227,20 @@ namespace MyApp // Note: actual namespace depends on the project name.
             if (Directory.Exists(@"D:\Developing\C#\Under Developing\ServerTransfer_bot"))
             {
 
-                string[] subdir = Directory.GetDirectories("/mnt/d/Developing/C#/Under Developing/ServerTransfer_bot");
+                string[] subdir = Directory.GetDirectories(@"D:\Developing\C#\Under Developing\ServerTransfer_bot");
                 foreach (var item in subdir)
                 {
-                    Console.WriteLine(item);
+                    Console.WriteLine("#" + Path.GetFileName(item));
+                    Console.WriteLine("@" + item);
                 }
 
-                string[] files = Directory.GetFiles("/mnt/d/Developing/C#/Under Developing/ServerTransfer_bot");
+                Console.WriteLine("--- Files---");
+                string[] files = Directory.GetFiles(@"D:\Developing\C#\Under Developing\ServerTransfer_bot");
 
                 foreach (var item in files)
                 {
-                    Console.WriteLine(item);
+                    
+                    Console.WriteLine(Path.GetFileName(item));
                 }
 
                 

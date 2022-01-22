@@ -10,7 +10,7 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
 
-namespace MyApp // Note: actual namespace depends on the project name.
+namespace ServerTransfer_bot // Note: actual namespace depends on the project name.
 {
     class Program
     {
@@ -31,25 +31,23 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
         static void Main(string[] args)
         {
-            FileLookup();
+            // check for guid(token) exist in file or not.
+            guidChecker();
 
-            //// check for guid(token) exist in file or not.
-            //guidChecker();
+            botClient = new TelegramBotClient(BotGuid);
 
-            //botClient = new TelegramBotClient(BotGuid);
+            // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
+            var receiverOptions = new ReceiverOptions
+            {
+                AllowedUpdates = { } // receive all update types
+            };
 
-            //// StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
-            //var receiverOptions = new ReceiverOptions
-            //{
-            //    AllowedUpdates = { } // receive all update types
-            //};
-
-            //// start bot 
-            //botClient.StartReceiving(
-            //    HandleUpdateAsync,
-            //    HandleErrorAsync,
-            //    receiverOptions,
-            //    cancellationToken: Cts.Token);
+            // start bot 
+            botClient.StartReceiving(
+                HandleUpdateAsync,
+                HandleErrorAsync,
+                receiverOptions,
+                cancellationToken: Cts.Token);
 
             Console.WriteLine("Running ...");
             Console.ReadKey();
@@ -220,36 +218,6 @@ namespace MyApp // Note: actual namespace depends on the project name.
 
         #endregion
 
-        #region File List
-
-        static void FileLookup()
-        {
-            if (Directory.Exists(@"D:\Developing\C#\Under Developing\ServerTransfer_bot"))
-            {
-
-                string[] subdir = Directory.GetDirectories(@"D:\Developing\C#\Under Developing\ServerTransfer_bot");
-                foreach (var item in subdir)
-                {
-                    Console.WriteLine("#" + Path.GetFileName(item));
-                    Console.WriteLine("@" + item);
-                }
-
-                Console.WriteLine("--- Files---");
-                string[] files = Directory.GetFiles(@"D:\Developing\C#\Under Developing\ServerTransfer_bot");
-
-                foreach (var item in files)
-                {
-                    
-                    Console.WriteLine(Path.GetFileName(item));
-                }
-
-                
-            }
-
-
-        }
-
-        #endregion
 
     }// End of Program Class
 }// End of MyApp namespace

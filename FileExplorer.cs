@@ -16,14 +16,14 @@ namespace ServerTransfer_bot
         #region Class Constructor
         public FileExplorer()
         {
-            // set curretn path based on default path(Rather user set or not there is always a default path)
+            // set current path based on default path(Rather user set or not there is always a default path)
             CurrentPath = SetCurretnPath(); 
         }
         #endregion
 
         #region Os Check
         /// <summary>
-        /// Check os Type for system file path
+        /// Check OS Type for system file path
         /// </summary>
         public void OsCheck()
         {
@@ -38,29 +38,29 @@ namespace ServerTransfer_bot
         }// end of OsCheck
         #endregion
 
-        #region Defult path 
+        #region Default path 
 
         /// <summary>
-        /// Check To make sure Defult path file that save user choosed defult path exist or not
+        /// Check To make sure Default path file that save user chose default path exist or not
         /// </summary>
         bool DefultPathFileCheck()
         {
             if (File.Exists("DefultPath.txt"))
             {
-                Console.WriteLine("Defult path holder File Exist");
+                Console.WriteLine("Default path holder File Exist");
                 return true;
             }
             else
             {
-                Console.WriteLine("Defult path holder File don't Exist");
+                Console.WriteLine("Default path holder File don't Exist");
                 return false;
             }
-        }//end of Defult Path File Check
+        }//end of Default Path File Check
 
         /// <summary>
-        /// Set Current path based on os that program runnig on it.
+        /// Set Current path based on OS that program running on it.
         /// </summary>
-        /// <returns>Default path that set by dev.</returns>
+        /// <returns>Default path that set by Dev.</returns>
         string SetCurretnPath()
         {
             if (DefultPathFileCheck())
@@ -74,9 +74,9 @@ namespace ServerTransfer_bot
         }
 
         /// <summary>
-        /// return path for specified os that this program run in it. this will be called when user don't set defult path.
+        /// return path for specified OS that this program run in it. this will be called when user don't set default path.
         /// </summary>
-        /// <returns>path of specified by running os </returns>
+        /// <returns>path of specified by running OS </returns>
         string OsDefultPath()
         {
             if (isLinux)

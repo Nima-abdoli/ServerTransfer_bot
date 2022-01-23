@@ -20,7 +20,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
         static private string? BotGuid;
         // bot client that connect to telegram server.
         static TelegramBotClient? botClient;
-        // every update from user intrate
+        // every update from user interact
         static Update mUpdate;
         static CancellationTokenSource Cts = new CancellationTokenSource();
         static CancellationToken canceltoken;
@@ -106,7 +106,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
         {
             if (command == "/start")
             {
-                SendMessage("Wellcome to File Transfer Robot");
+                SendMessage("Welcome to File Transfer Robot");
             }
             else if (command == "/getfile")
             {
@@ -162,7 +162,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
                 // downloading file
                 await botClient.DownloadFileAsync(file.FilePath, fs);
 
-                //flush filestream process.
+                //flush fileStream process.
                 fs.Close();
                 fs.Dispose();
             }
@@ -175,7 +175,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
         #endregion
 
-        #region ErrorHandling and ckeck
+        #region ErrorHandling and check
 
         static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
@@ -192,7 +192,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
         }
 
         /// <summary>
-        /// chack if guid file exit or not. if not exist make one and get guid from user.
+        /// check if guid file exit or not. if not exist make one and get guid from user.
         /// </summary>
         static void guidChecker()
         {

@@ -29,8 +29,12 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
         #region Main(Start)
 
+        static FileExplorer fx =new FileExplorer();
+
         static void Main(string[] args)
         {
+            Console.WriteLine(fx.CurrentPath);
+
             // check for guid(token) exist in file or not.
             guidChecker();
 

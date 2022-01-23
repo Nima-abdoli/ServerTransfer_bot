@@ -16,6 +16,7 @@ namespace ServerTransfer_bot
         #region Class Constructor
         public FileExplorer()
         {
+            // set curretn path based on default path(Rather user set or not there is always a default path)
             CurrentPath = SetCurretnPath(); 
         }
         #endregion
@@ -56,7 +57,10 @@ namespace ServerTransfer_bot
             }
         }//end of Defult Path File Check
 
-
+        /// <summary>
+        /// Set Current path based on os that program runnig on it.
+        /// </summary>
+        /// <returns>Default path that set by dev.</returns>
         string SetCurretnPath()
         {
             if (DefultPathFileCheck())

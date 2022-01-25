@@ -29,12 +29,15 @@ namespace ServerTransfer_bot
 
 
         #region Class Constructor
+
         public FileExplorer()
         {
             // set current path based on default path(Rather user set or not there is always a default path)
             CurrentPath = SetCurretnPath();
             PathLookup(CurrentPath);
-        }
+
+        }// End of Constructor
+
         #endregion
 
         #region Os Check
@@ -94,10 +97,11 @@ namespace ServerTransfer_bot
         /// </summary>
         /// <returns>path of specified by running OS </returns>
         string OsDefultPath()
-        {
+        { 
             if (isLinux)
             {
-                return "/home";
+                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                //return "/home";
             }
             else
             {

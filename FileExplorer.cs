@@ -9,15 +9,31 @@ namespace ServerTransfer_bot
 {
     public class FileExplorer
     {
+        #region Private Property
+
         private bool isLinux;
-        private string DefultPath;
+        //private string DefultPath;
+
+        #endregion
+
+        #region Public Property
+
+        // Current path that user start or choose to be in it.
         public string CurrentPath { get; set; }
+        // Hold full path of file or folder in current given path
+        public List<string> CurrentFilesPath = new List<string>();
+        // Hold only name of file or folder in current given path
+        public List<string> CurrentFilesName = new List<string>();
+
+        #endregion
+
 
         #region Class Constructor
         public FileExplorer()
         {
             // set current path based on default path(Rather user set or not there is always a default path)
-            CurrentPath = SetCurretnPath(); 
+            CurrentPath = SetCurretnPath();
+            PathLookup(CurrentPath);
         }
         #endregion
 
@@ -96,30 +112,52 @@ namespace ServerTransfer_bot
             return new string[] { "file1", "file2", "file3", "file4", "Folder5", };
         }
 
-        #region File List
+        #region Path lookup
 
-        static void FileLookup()
+        /// <summary>
+        /// show list of subfiles and folders and put them in list to be accessible in other part of program.
+        /// </summary>
+        /// <param name="path">Path that user in it and want to see subfiles and folders</param>
+        void PathLookup(string path)
         {
-            if (Directory.Exists(@"D:\Developing\C#\Under Developing\ServerTransfer_bot"))
-            {
 
-                string[] subdir = Directory.GetDirectories(@"D:\Developing\C#\Under Developing\ServerTransfer_bot");
+            if (Directory.Exists(path))
+            {
+                // Clear both list in case new path is given and don't append new files and folder.
+                ClearCurrentLists();
+
+                // get all of folder in given path
+                string[] subdir = Directory.GetDirectories(path);
                 foreach (var item in subdir)
-                {
-                    Console.WriteLine("#" + Path.GetFileName(item));
-                    Console.WriteLine("@" + item);
+                { 
+                    CurrentFilesPath.Add(item);
+                    CurrentFilesName.Add(Path.GetFileName(item));
                 }
 
-                Console.WriteLine("--- Files---");
-                string[] files = Directory.GetFiles(@"D:\Developing\C#\Under Developing\ServerTransfer_bot");
-
+                //get all files in given path
+                string[] files = Directory.GetFiles(path);
                 foreach (var item in files)
                 {
-
-                    Console.WriteLine(Path.GetFileName(item));
+                    CurrentFilesPath.Add(item);
+                    CurrentFilesName.Add(Path.GetFileName(item));
                 }
             }
         }// End of File LookUp
+
+        /// <summary>
+        /// Clear current list in case new path is given.
+        /// </summary>
+        void ClearCurrentLists()
+        {
+            if (CurrentFilesName != null)
+            {
+                CurrentFilesName.Clear();
+            }
+            if (CurrentFilesPath != null)
+            {
+                CurrentFilesPath.Clear();
+            }
+        }//end of Clear Current Lists
 
         #endregion
 

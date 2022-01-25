@@ -107,11 +107,6 @@ namespace ServerTransfer_bot
 
         #endregion
 
-        public string[] FilesInPath()
-        {
-            return new string[] { "file1", "file2", "file3", "file4", "Folder5", };
-        }
-
         #region Path lookup
 
         /// <summary>

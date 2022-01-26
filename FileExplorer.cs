@@ -158,6 +158,14 @@ namespace ServerTransfer_bot
             }
         }//end of Clear Current Lists
 
+        /// <summary>
+        /// go back in current directory
+        /// </summary>
+        public void BackinPath()
+        {
+            CurrentPath = Directory.GetParent(CurrentPath).FullName;
+        }// end of BackinPath
+
         #endregion
 
 

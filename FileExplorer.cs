@@ -170,12 +170,14 @@ namespace ServerTransfer_bot
         #region List Text Maker
 
         /// <summary>
-        /// make text from files and folder in current list
+        /// make text from Items in current list and determine if it's folder or file with emoji
         /// </summary>
-        /// <returns>File and folders name as string</returns>
+        /// <returns>File and folders name in string</returns>
         public string ListinText()
         {
+            // hold string that be send 
             string text = "\n";
+            // add numeric before item in text
             int c = 1;
 
             foreach (var item in CurrentFilesName)
@@ -192,7 +194,7 @@ namespace ServerTransfer_bot
             }
 
             return text;
-        }
+        }// end of List In Text 
 
         #endregion
 

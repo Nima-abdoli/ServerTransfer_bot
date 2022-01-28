@@ -25,11 +25,11 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
         static CancellationTokenSource Cts = new CancellationTokenSource();
         static CancellationToken canceltoken;
 
+        static FileExplorer fx = new FileExplorer();
+
         #endregion
 
         #region Main(Start)
-
-        static FileExplorer fx =new FileExplorer();
 
         static void Main(string[] args)
         {
@@ -221,7 +221,6 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
         }
 
         #endregion
-
 
     }// End of Program Class
 }// End of MyApp namespace

@@ -21,12 +21,11 @@ namespace ServerTransfer_bot
         // Current path that user start or choose to be in it.
         public string CurrentPath { get; set; }
         // Hold full path of file or folder in current given path
-        public List<string> CurrentFilesPath = new List<string>();
+        public List<FileType> CurrentFilesPath = new List<FileType>();
         // Hold only name of file or folder in current given path
-        public List<string> CurrentFilesName = new List<string>();
+        public List<FileType> CurrentFilesName = new List<FileType>();
 
         #endregion
-
 
         #region Class Constructor
 
@@ -128,17 +127,17 @@ namespace ServerTransfer_bot
                 // get all of folder in given path
                 string[] subdir = Directory.GetDirectories(path);
                 foreach (var item in subdir)
-                { 
-                    CurrentFilesPath.Add(item);
-                    CurrentFilesName.Add(Path.GetFileName(item));
+                {
+                    CurrentFilesPath.Add(new FileType { Filename = item, IsFolder = true });
+                    CurrentFilesName.Add(new FileType { Filename = Path.GetFileName(item), IsFolder = true });
                 }
 
                 //get all files in given path
                 string[] files = Directory.GetFiles(path);
                 foreach (var item in files)
                 {
-                    CurrentFilesPath.Add(item);
-                    CurrentFilesName.Add(Path.GetFileName(item));
+                    CurrentFilesPath.Add(new FileType { Filename = item, IsFolder = false });
+                    CurrentFilesName.Add(new FileType { Filename = Path.GetFileName(item), IsFolder = false });
                 }
             }
         }// End of File LookUp
@@ -168,6 +167,38 @@ namespace ServerTransfer_bot
 
         #endregion
 
+        #region List Text Maker
 
-    }
-}
+        /// <summary>
+        /// make text from files and folder in current list
+        /// </summary>
+        /// <returns>File and folders name as string</returns>
+        public string ListinText()
+        {
+            string text = "\n";
+            int c = 1;
+
+            foreach (var item in CurrentFilesName)
+            {
+                if (item.IsFolder)
+                {
+                    text += c + " - 📁 "+ item.Filename + "\n";
+                }
+                else
+                {
+                    text += c + " - ▫ " + item.Filename + "\n";
+                }
+                c++;
+            }
+
+            return text;
+        }
+
+        #endregion
+
+
+    }// End of FileExplorer Class
+
+
+
+}// end of ServerTransfer_bot NameSpace

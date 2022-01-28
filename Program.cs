@@ -110,7 +110,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             }
             else if (command == "/getfile")
             {
-                SendMessage("Getting File is Under Maintenance ...");
+                SendMessage("Getting File is Under Maintenance ... ☺"+ fx.ListinText());
             }
             else if (command == "/sendfile")
             {

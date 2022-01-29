@@ -66,37 +66,42 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             mUpdate = update;
             canceltoken = cancellationToken;
 
-            // Only process Message updates: https://core.telegram.org/bots/api#message
-            if (update.Type != UpdateType.Message)
-                return;
-            else
-            {
-                // Only process text messages
-                if (update.Message!.Type == MessageType.Text)
+            //if (UserCheck(update.Message.Chat.Username))
+            //{
+                // Only process Message updates: https://core.telegram.org/bots/api#message
+                if (update.Type != UpdateType.Message)
+                    return;
+                else
                 {
-                    var chatId = update.Message.Chat.Id;
-                    var messageText = update.Message.Text;
+                    // Only process text messages
+                    if (update.Message!.Type == MessageType.Text)
+                    {
+                        var chatId = update.Message.Chat.Username;
+                        var messageText = update.Message.Text;
 
-                    Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
+                        Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
 
-                    CommandHandler(messageText);
-                }
+                        CommandHandler(messageText);
+                    }
+                    //Only process documents(mostly all kind of file pdf,exe,txt,zip and ...)
+                    else if (update.Message!.Type == MessageType.Document)
+                    {
+                        var chatIdf = update.Message.Chat.Id;
 
-                //Only process documents(mostly all kind of file pdf,exe,txt,zip and ...)
-                else if (update.Message!.Type == MessageType.Document)
-                {
-                    var chatIdf = update.Message.Chat.Id;
+                        Message sentMessagef = await botClient.SendTextMessageAsync(
+                        chatId: chatIdf,
+                        text: "You send:\n" + update.Message.Document.FileName + " - " +
+                            update.Message.Document.MimeType + " - " + "File",
+                        cancellationToken: cancellationToken);
 
-                    Message sentMessagef = await botClient.SendTextMessageAsync(
-                    chatId: chatIdf,
-                    text: "You send:\n" + update.Message.Document.FileName + " - " +
-                        update.Message.Document.MimeType + " - " + "File",
-                    cancellationToken: cancellationToken);
-
-                    FileDownloader(update.Message.Document.FileName, update.Message.Document.FileId);
-                }
+                        FileDownloader(update.Message.Document.FileName, update.Message.Document.FileId);
+                    }
+                //}
             }
+            
         }// end of Handle Update Async
+
+
 
         #endregion
 
@@ -218,6 +223,59 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
         static void ErrorLog(string str)
         {
             System.IO.File.AppendAllText("log.txt", str + DateTime.Now);
+        }
+
+        static bool UserCheck(string UserName)
+        {
+            bool UserValidate = false;
+            UserFileCheck();
+            
+            string[] users = System.IO.File.ReadAllLines("User.txt");
+
+            foreach (string user in users)
+            {
+                if (UserName == user)
+                {
+                    UserValidate = true;
+                }
+                else
+                {
+                    UserValidate = false;
+                }
+            }
+
+            return UserValidate;
+        }
+
+        static void UserFileCheck()
+        {
+            if (System.IO.File.Exists("User.txt") != true)
+            {
+                MakeUserFile();
+            }
+        }
+
+        static void MakeUserFile()
+        {
+            bool c = false;
+
+            do
+            {
+                Console.WriteLine("Enter UserName you want to access the your Server : ");
+                System.IO.File.AppendAllText("guid.txt", Console.ReadLine());
+                Console.WriteLine("Do you Want add other user ?");
+                Console.WriteLine(" y - Yes  | n - No");
+
+                if (Console.ReadLine() == "y")
+                {
+                    c = true;
+                }
+                else
+                {
+                    c = false;
+                }
+
+            } while (c);
         }
 
         #endregion

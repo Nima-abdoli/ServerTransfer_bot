@@ -176,7 +176,7 @@ namespace ServerTransfer_bot
         public string ListinText()
         {
             // hold string that be send 
-            string text = "\n";
+            string text = "\n🔗 " + CurrentPath + "\n\n";
             // add numeric before item in text
             int c = 1;
 

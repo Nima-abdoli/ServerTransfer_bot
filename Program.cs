@@ -37,6 +37,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
             // check for guid(token) exist in file or not.
             guidChecker();
+            UserFileCheck();
 
             botClient = new TelegramBotClient(BotGuid);
 
@@ -66,8 +67,8 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             mUpdate = update;
             canceltoken = cancellationToken;
 
-            //if (UserCheck(update.Message.Chat.Username))
-            //{
+            if (UserCheck(update.Message.Chat.Username))
+            {
                 // Only process Message updates: https://core.telegram.org/bots/api#message
                 if (update.Type != UpdateType.Message)
                     return;
@@ -96,7 +97,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
                         FileDownloader(update.Message.Document.FileName, update.Message.Document.FileId);
                     }
-                //}
+                }
             }
             
         }// end of Handle Update Async
@@ -257,25 +258,25 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
         static void MakeUserFile()
         {
-            bool c = false;
+            bool Counter = false;
 
             do
             {
                 Console.WriteLine("Enter UserName you want to access the your Server : ");
-                System.IO.File.AppendAllText("guid.txt", Console.ReadLine());
+                System.IO.File.AppendAllText("User.txt", Console.ReadLine());
                 Console.WriteLine("Do you Want add other user ?");
                 Console.WriteLine(" y - Yes  | n - No");
 
                 if (Console.ReadLine() == "y")
                 {
-                    c = true;
+                    Counter = true;
                 }
                 else
                 {
-                    c = false;
+                    Counter = false;
                 }
 
-            } while (c);
+            } while (Counter);
         }
 
         #endregion

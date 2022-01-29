@@ -102,6 +102,10 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
                     }
                 }
             }// UserCheck if
+            else
+            {
+                SendMessage("⛔⚠ You are not Authorize to access this Robot ⛔⚠");
+            }
             
         }// end of Handle Update Async
 

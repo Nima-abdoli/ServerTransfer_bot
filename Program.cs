@@ -37,8 +37,11 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
             // check for guid(token) exist in file or not.
             guidChecker();
+            // Check for UserFile Exist
             UserFileCheck();
 
+            // Create Telegram client. this object acted as bot itself, it mean every thing come to this object.
+            // all messages, all files. 
             botClient = new TelegramBotClient(BotGuid);
 
             // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
@@ -98,11 +101,9 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
                         FileDownloader(update.Message.Document.FileName, update.Message.Document.FileId);
                     }
                 }
-            }
+            }// UserCheck if
             
         }// end of Handle Update Async
-
-
 
         #endregion
 
@@ -226,11 +227,18 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             System.IO.File.AppendAllText("log.txt", str + DateTime.Now);
         }
 
+        /// <summary>
+        /// check if user that send message or file authorize to access this bot or not
+        /// </summary>
+        /// <param name="UserName">incoming username that send message</param>
+        /// <returns>boolean to that authorize user or not</returns>
         static bool UserCheck(string UserName)
         {
             bool UserValidate = false;
+            // check if user file that hold authorize user exist or not.
             UserFileCheck();
             
+            // all user in file
             string[] users = System.IO.File.ReadAllLines("User.txt");
 
             foreach (string user in users)
@@ -246,16 +254,23 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             }
 
             return UserValidate;
-        }
+        }// end of UserCheck
 
+        /// <summary>
+        /// Check if Users File exist or not. if file don't exist request from user to add username.
+        /// </summary>
         static void UserFileCheck()
         {
             if (System.IO.File.Exists("User.txt") != true)
             {
+                // make user file, and request username from user.
                 MakeUserFile();
             }
-        }
+        }// end of UserFileCheck
 
+        /// <summary>
+        /// make username file.
+        /// </summary>
         static void MakeUserFile()
         {
             bool Counter = false;
@@ -263,6 +278,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             do
             {
                 Console.WriteLine("Enter UserName you want to access the your Server : ");
+                // get user name from user and add it to 'Usert.txt' File.
                 System.IO.File.AppendAllText("User.txt", Console.ReadLine());
                 Console.WriteLine("Do you Want add other user ?");
                 Console.WriteLine(" y - Yes  | n - No");
@@ -277,7 +293,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
                 }
 
             } while (Counter);
-        }
+        }// End of Make User File
 
         #endregion
 

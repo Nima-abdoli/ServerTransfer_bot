@@ -12,7 +12,7 @@ I plan to add file exploring, zip/unzip files and i don't know it's possible or 
 - [x] Downloading File
 - [ ] File Exploring
 - [ ] zip file in server side then send it.
-- [ ] Run applications in server
+- [ ] Execute Programs in server
 - [ ] Make uploaded app start in boot
 - [ ] Replace file of uploaded project(app) with new version
 

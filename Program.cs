@@ -9,6 +9,7 @@ using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InputFiles;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace ServerTransfer_bot // Note: actual namespace depends on the project name.
 {
@@ -85,7 +86,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
                         Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
 
-                        CommandHandler(messageText);
+                        CommandHandler(messageText,update);
                     }
                     //Only process documents(mostly all kind of file pdf,exe,txt,zip and ...)
                     else if (update.Message!.Type == MessageType.Document)
@@ -113,7 +114,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
         #region CommandHandling
 
-        static void CommandHandler(string command)
+        static async void CommandHandler(string command,Update update)
         {
             if (command == "/start")
             {
@@ -126,10 +127,51 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             else if (command == "/sendfile")
             {
                 SendMessage("Sending File is Under Maintenance ...");
+
+                InlineKeyboardMarkup inlineKeyboard = new(new[]
+                    {
+                        // first row
+                        new []
+                        {
+                            InlineKeyboardButton.WithCallbackData(text: "1.1", callbackData: "11"),
+                            InlineKeyboardButton.WithCallbackData(text: "1.2", callbackData: "12"),
+                        },
+                        // second row
+                        new []
+                        {
+                            InlineKeyboardButton.WithCallbackData(text: "2.1", callbackData: "21"),
+                            InlineKeyboardButton.WithCallbackData(text: "2.2", callbackData: "22"),
+                        },
+                    });
+
+                Message sentMessage = await botClient.SendTextMessageAsync(
+                        chatId: update.Message.Chat.Id,
+                        text: "A message with an inline keyboard markup",
+                        replyMarkup: inlineKeyboard,
+                        cancellationToken: canceltoken);
+
             }
             else if (command == "/explore")
             {
                 SendMessage("File Exploration is Under Maintenance ...");
+
+                ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
+                    {
+                        new KeyboardButton[] { "One", "Two" },
+                        new KeyboardButton[] { "Three", "Four" },
+                    })
+                    {
+                        ResizeKeyboard = true
+                    };
+
+                Int64 ChatId = mUpdate.Message.Chat.Id;
+
+                Message sentMessage = await botClient.SendTextMessageAsync(
+                    chatId: ChatId,
+                    text: "Choose a response",
+                    replyMarkup: replyKeyboardMarkup,
+                    cancellationToken: canceltoken);
+
             }
             else
             {

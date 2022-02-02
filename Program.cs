@@ -71,12 +71,10 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             mUpdate = update;
             canceltoken = cancellationToken;
 
-            if (UserCheck(update.Message.Chat.Username))
+            // Only process Message updates: https://core.telegram.org/bots/api#message
+            if (update.Type == UpdateType.Message)
             {
-                // Only process Message updates: https://core.telegram.org/bots/api#message
-                if (update.Type != UpdateType.Message)
-                    return;
-                else
+                if (UserCheck(update.Message.Chat.Username))
                 {
                     // Only process text messages
                     if (update.Message!.Type == MessageType.Text)
@@ -86,7 +84,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
                         Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
 
-                        CommandHandler(messageText,update);
+                        CommandHandler(messageText);
                     }
                     //Only process documents(mostly all kind of file pdf,exe,txt,zip and ...)
                     else if (update.Message!.Type == MessageType.Document)
@@ -101,20 +99,41 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
 
                         FileDownloader(update.Message.Document.FileName, update.Message.Document.FileId);
                     }
+
+                }// UserCheck if
+                else
+                {
+                    SendMessage("⛔⚠ You are not Authorize to access this Robot ⛔⚠");
                 }
-            }// UserCheck if
+            }//end of Only message type Statement.
+
+            // only process CallbackQuery Updates.
+            else if (update.Type == UpdateType.CallbackQuery)
+            {
+                if (UserCheck(update.CallbackQuery.From.Username))
+                {
+                    if (update.CallbackQuery.Data == "back")
+                    {
+                        fx.BackinPath();
+                    }
+                }
+                else
+                {
+                    SendMessage("⛔⚠ You are not Authorize to access this Robot ⛔⚠");
+                }
+            }// end of only Callback query type Statement.
+
             else
             {
-                SendMessage("⛔⚠ You are not Authorize to access this Robot ⛔⚠");
+                return;
             }
-            
         }// end of Handle Update Async
 
         #endregion
 
         #region CommandHandling
 
-        static async void CommandHandler(string command,Update update)
+        static async void CommandHandler(string command)
         {
             if (command == "/start")
             {
@@ -122,7 +141,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             }
             else if (command == "/getfile")
             {
-                SendMessage("Getting File is Under Maintenance ..."+ fx.ListinText());
+                SendMessage("Getting File is Under Maintenance ..." + fx.GetFiles());
             }
             else if (command == "/sendfile")
             {
@@ -133,19 +152,19 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
                         // first row
                         new []
                         {
-                            InlineKeyboardButton.WithCallbackData(text: "1.1", callbackData: "11"),
-                            InlineKeyboardButton.WithCallbackData(text: "1.2", callbackData: "12"),
+                            InlineKeyboardButton.WithCallbackData(text: "Back", callbackData: "back"),
+                            InlineKeyboardButton.WithCallbackData(text: "Select", callbackData: "Select"),
                         },
                         // second row
                         new []
                         {
-                            InlineKeyboardButton.WithCallbackData(text: "2.1", callbackData: "21"),
-                            InlineKeyboardButton.WithCallbackData(text: "2.2", callbackData: "22"),
+                            InlineKeyboardButton.WithCallbackData(text: "Delete", callbackData: "del"),
+                            InlineKeyboardButton.WithCallbackData(text: "Create", callbackData: "22"),
                         },
                     });
 
                 Message sentMessage = await botClient.SendTextMessageAsync(
-                        chatId: update.Message.Chat.Id,
+                        chatId: mUpdate.Message.Chat.Id,
                         text: "A message with an inline keyboard markup",
                         replyMarkup: inlineKeyboard,
                         cancellationToken: canceltoken);
@@ -167,10 +186,8 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
         /// <param name="message">text of message</param>
         static async void SendMessage(string message)
         {
-            Int64 ChatId = mUpdate.Message.Chat.Id;
-
             Message SentMessage = await botClient.SendTextMessageAsync(
-                chatId : ChatId,
+                chatId : mUpdate.Message.Chat.Id,
                 text : message,
                 cancellationToken: canceltoken);
         }

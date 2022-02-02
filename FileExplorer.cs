@@ -143,6 +143,17 @@ namespace ServerTransfer_bot
         }// End of File LookUp
 
         /// <summary>
+        /// this function is to be called from out side and send back reseted path. so it will send back files and folder in new path in case 
+        /// user go back or forward in path.
+        /// </summary>
+        /// <returns>List of files and folders in current as string</returns>
+        public string GetFiles()
+        {
+            PathLookup(CurrentPath);
+            return ListinText();
+        }
+
+        /// <summary>
         /// Clear current list in case new path is given.
         /// </summary>
         void ClearCurrentLists()

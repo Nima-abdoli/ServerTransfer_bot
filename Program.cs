@@ -154,24 +154,6 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
             else if (command == "/explore")
             {
                 SendMessage("File Exploration is Under Maintenance ...");
-
-                ReplyKeyboardMarkup replyKeyboardMarkup = new(new[]
-                    {
-                        new KeyboardButton[] { "One", "Two" },
-                        new KeyboardButton[] { "Three", "Four" },
-                    })
-                    {
-                        ResizeKeyboard = true
-                    };
-
-                Int64 ChatId = mUpdate.Message.Chat.Id;
-
-                Message sentMessage = await botClient.SendTextMessageAsync(
-                    chatId: ChatId,
-                    text: "Choose a response",
-                    replyMarkup: replyKeyboardMarkup,
-                    cancellationToken: canceltoken);
-
             }
             else
             {
@@ -270,7 +252,7 @@ namespace ServerTransfer_bot // Note: actual namespace depends on the project na
         /// <param name="str">error string</param>
         static void ErrorLog(string str)
         {
-            System.IO.File.AppendAllText("log.txt", str + DateTime.Now);
+            System.IO.File.AppendAllText("log.txt", "# Log - " + DateTime.Now + "\n" + str + "\n-------------------------------------\n");
         }
 
         /// <summary>

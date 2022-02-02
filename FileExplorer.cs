@@ -173,6 +173,7 @@ namespace ServerTransfer_bot
         /// </summary>
         public void BackinPath()
         {
+            //TODO : There is bug when reach root or top of path.
             CurrentPath = Directory.GetParent(CurrentPath).FullName;
         }// end of BackinPath
 

@@ -173,8 +173,12 @@ namespace ServerTransfer_bot
         /// </summary>
         public void BackinPath()
         {
-            //TODO : There is bug when reach root or top of path.
-            CurrentPath = Directory.GetParent(CurrentPath).FullName;
+            // check to make sure don't go furter than root. if go make bug and error
+            if (Directory.GetParent(CurrentPath) != null)
+            {
+                CurrentPath = Directory.GetParent(CurrentPath).FullName;
+            }
+            
         }// end of BackinPath
 
         #endregion
